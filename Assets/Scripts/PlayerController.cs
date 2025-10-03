@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     public float speedJump = 10; //ジャンプスピード
     public GameObject body;
     public GameObject boms;
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -49,18 +50,23 @@ public class PlayerController : MonoBehaviour
             //徐々に加速しZ方向に常に前進させる
             float acceleratedZ = moveDirection.z + (accelerationZ * Time.deltaTime);
             moveDirection.z = Mathf.Clamp(acceleratedZ, 0, speedZ);
+
             //X方向は目標のポジションまでの差分の割合で速度を計算
             float ratioX = (targetLane * LaneWidth - transform.position.x) / LaneWidth;
             moveDirection.x = ratioX * speedX;
         }
+
         //重力分の力をフレーム追加
         moveDirection.y -= gravity * Time.deltaTime;
+
         //移動実行
         Vector3 globalDirection = transform.TransformDirection(moveDirection);
         controller.Move(globalDirection * Time.deltaTime);
+
         //移動後接地してたらY方向の速度はリセットする
         if (controller.isGrounded) moveDirection.y = 0;
     }
+
     //左のレーンに移動を開始
     public void MoveToLeft()
     {
@@ -84,11 +90,13 @@ public class PlayerController : MonoBehaviour
         //地面に接触していればY方向の力を設定
         if (controller.isGrounded) moveDirection.y = speedJump;
     }
+
     //体力をリターン
     public int Life()
     {
         return life;
     }
+
     //スタン中かチェック
     bool IsStun()
     {
@@ -99,10 +107,12 @@ public class PlayerController : MonoBehaviour
         //Stunフラグをリターン
         return stun;
     }
+
     //接触判定
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if (IsStun()) return;
+
         //ぶつかった相手がEnemyなら
         if (hit.gameObject.CompareTag("Enemy"))
         {
@@ -114,12 +124,14 @@ public class PlayerController : MonoBehaviour
                 Instantiate(boms, transform.position, Quaternion.identity); //爆発エフェクトの発生
                 Destroy(gameObject, 0.5f); //少し時間差で自分を消滅
             }
+
             //recoverTimeの時間を設定
             recoverTime = StunDuration;
             //接触したEnemyを削除
             Destroy(hit.gameObject);
         }
     }
+
     //点滅処理
     void Blinking()
     {
