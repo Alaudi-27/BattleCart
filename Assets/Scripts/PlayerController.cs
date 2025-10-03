@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
 
 public class PlayerController : MonoBehaviour
 {
@@ -8,16 +7,25 @@ public class PlayerController : MonoBehaviour
     const float LaneWidth = 6.0f;
     const float StunDuration = 0.5f;
     float recoverTime = 0.0f;
+
     public int life = 10;
+
     CharacterController controller;
+
     Vector3 moveDirection = Vector3.zero;
     int targetLane;
+
     public float gravity = 9.81f; //重力
+
     public float speedZ = 10; //前進方向のスピードの上限値
     public float accelerationZ = 8; //加速度
+
     public float speedX = 10; //横方向に移動するときのスピード
+
     public float speedJump = 10; //ジャンプスピード
+
     public GameObject body;
+
     public GameObject boms;
 
     void Start()
@@ -32,7 +40,7 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) MoveToLeft();
             if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) MoveToRight();
-            if (Input.GetKeyDown("space")) Jump();
+            if (Input.GetKeyDown(KeyCode.Space)) Jump();
         }
 
         //もしスタン中かLifeが0なら動きを止める
@@ -42,6 +50,7 @@ public class PlayerController : MonoBehaviour
             moveDirection.z = 0;
             //復活までの時間をカウント
             recoverTime -= Time.deltaTime;
+
             //点滅処理
             Blinking();
         }
@@ -65,6 +74,7 @@ public class PlayerController : MonoBehaviour
 
         //移動後接地してたらY方向の速度はリセットする
         if (controller.isGrounded) moveDirection.y = 0;
+
     }
 
     //左のレーンに移動を開始
@@ -118,13 +128,13 @@ public class PlayerController : MonoBehaviour
         {
             //体力をマイナス
             life--;
+
             if (life <= 0)
             {
                 GameManager.gameState = GameState.gameover;
                 Instantiate(boms, transform.position, Quaternion.identity); //爆発エフェクトの発生
                 Destroy(gameObject, 0.5f); //少し時間差で自分を消滅
             }
-
             //recoverTimeの時間を設定
             recoverTime = StunDuration;
             //接触したEnemyを削除
@@ -142,4 +152,5 @@ public class PlayerController : MonoBehaviour
         //負の周期なら非表示
         else body.SetActive(false);
     }
+
 }

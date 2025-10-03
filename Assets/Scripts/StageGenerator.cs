@@ -41,7 +41,7 @@ public class StageGenerator : MonoBehaviour
         }
     }
 
-    // 指定のIndexまでのステージチップを生成して、管理下に置く
+    // 指定のIndexまでのステージチップを生成して、管理化に置く
     void UpdateStage(int toChipIndex)
     {
         if (toChipIndex <= currentChipIndex) return;
