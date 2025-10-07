@@ -2,74 +2,74 @@ using UnityEngine;
 
 public class EnemyGenerator : MonoBehaviour
 {
-    const float Lanewidth = 6.0f; //ƒŒ[ƒ“•
+    const float Lanewidth = 6.0f; //ãƒ¬ãƒ¼ãƒ³å¹…
 
-    public GameObject[] dangerPrefab; //¶¬‚³‚ê‚éŠëŒ¯Ô‚ÌƒvƒŒƒnƒu
+    public GameObject[] dangerPrefab; //ç”Ÿæˆã•ã‚Œã‚‹å±é™ºè»Šã®ãƒ—ãƒ¬ãƒãƒ–
 
-    public float minIntervalTime = 0.1f; //ƒCƒ“ƒ^[ƒoƒ‹‚ÌÅ¬
-    public float maxIntervalTime = 1.0f; //ƒCƒ“ƒ^[ƒoƒ‹‚ÌÅ‘å
+    public float minIntervalTime = 0.1f; //ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒ«ã®æœ€å°
+    public float maxIntervalTime = 1.0f; //ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒ«ã®æœ€å¤§
 
-    float timer; //ŠÔŒo‰ß‚ğŠÏ‘ª
-    float posX; //ŠëŒ¯Ô‚ÌoŒ»XÀ•W
+    float timer; //æ™‚é–“çµŒéã‚’è¦³æ¸¬
+    float posX; //å±é™ºè»Šã®å‡ºç¾Xåº§æ¨™
 
-    GameObject cam; //ƒJƒƒ‰ƒIƒuƒWƒFƒNƒg
+    GameObject cam; //ã‚«ãƒ¡ãƒ©ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 
-    //‰ŠúˆÊ’u
+    //åˆæœŸä½ç½®
     public Vector3 defaultPos = new Vector3(0, 3, 120);
 
     Vector3 diff;
-    public float followSpeed = 8; //ƒWƒFƒlƒŒ[ƒ^[‚Ì•âŠÔƒXƒs[ƒh
+    public float followSpeed = 8; //ã‚¸ã‚§ãƒãƒ¬ãƒ¼ã‚¿ãƒ¼ã®è£œé–“ã‚¹ãƒ”ãƒ¼ãƒ‰
 
     int isSky; //
 
     void Start()
     {
-        transform.position = defaultPos; //ƒWƒFƒlƒŒ[ƒ^[‚Ì‰Šú’l
-        cam = Camera.main.gameObject; //ƒJƒƒ‰‚ÌƒIƒuƒWƒFƒNƒgî•ñ
-        diff = transform.position - cam.transform.position; //Å‰‚Ì“_‚Å‚ÌƒJƒƒ‰‚ÆƒWƒFƒlƒŒ[ƒ^[‚ÌˆÊ’u‚Ì·
+        transform.position = defaultPos; //ã‚¸ã‚§ãƒãƒ¬ãƒ¼ã‚¿ãƒ¼ã®åˆæœŸå€¤
+        cam = Camera.main.gameObject; //ã‚«ãƒ¡ãƒ©ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæƒ…å ±
+        diff = transform.position - cam.transform.position; //æœ€åˆã®æ™‚ç‚¹ã§ã®ã‚«ãƒ¡ãƒ©ã¨ã‚¸ã‚§ãƒãƒ¬ãƒ¼ã‚¿ãƒ¼ã®ä½ç½®ã®å·®
 
-        //ƒ^ƒCƒ}[‚Íƒ‰ƒ“ƒ_ƒ€‚ÉŒˆ‚Ü‚é
+        //ã‚¿ã‚¤ãƒãƒ¼ã¯ãƒ©ãƒ³ãƒ€ãƒ ã«æ±ºã¾ã‚‹
         timer = Random.Range(minIntervalTime, maxIntervalTime + 1);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.gameState != GameState.playing) return; //ƒXƒe[ƒ^ƒX‚ªplaying‚Å‚È‚¯‚ê‚Î‰½‚à‚µ‚È‚¢
+        if (GameManager.gameState != GameState.playing) return; //ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãŒplayingã§ãªã‘ã‚Œã°ä½•ã‚‚ã—ãªã„
 
-        timer -= Time.deltaTime; //ƒJƒEƒ“ƒgƒ_ƒEƒ“
+        timer -= Time.deltaTime; //ã‚«ã‚¦ãƒ³ãƒˆãƒ€ã‚¦ãƒ³
 
         if (timer <= 0)
-        { //0‚É‚È‚Á‚½‚ç
-            DangerCreated(); //ŠëŒ¯Ô‚Ì¶¬
-            maxIntervalTime -= 0.1f; //¶¬‚Ì“x‚ÉÅ‘åƒCƒ“ƒ^[ƒoƒ‹‚ÌŠÔŠu‚ğ’Z‚­
-            maxIntervalTime = Mathf.Clamp(maxIntervalTime, 0.1f, 3.0f); //Å¬‚Å‚à0.1f
+        { //0ã«ãªã£ãŸã‚‰
+            DangerCreated(); //å±é™ºè»Šã®ç”Ÿæˆ
+            maxIntervalTime -= 0.1f; //ç”Ÿæˆã®åº¦ã«æœ€å¤§ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒ«ã®é–“éš”ã‚’çŸ­ã
+            maxIntervalTime = Mathf.Clamp(maxIntervalTime, 0.1f, .0f); //æœ€å°ã§ã‚‚0.1f
             timer = Random.Range(minIntervalTime, maxIntervalTime + 1);
         }
     }
 
-    //ƒWƒFƒlƒŒ[ƒ^[‚ª‚¸‚Á‚Æ’Ç]‚µ‚Ä‚­‚é‚æ‚¤‚É
+    //ã‚¸ã‚§ãƒãƒ¬ãƒ¼ã‚¿ãƒ¼ãŒãšã£ã¨è¿½å¾“ã—ã¦ãã‚‹ã‚ˆã†ã«
     private void FixedUpdate()
     {
-        //üŒ`•âŠÔ‚ğg‚Á‚ÄAƒWƒFƒlƒŒ[ƒ^[‚ğ–Ú“I‚ÌêŠ‚É“®‚©‚·
-        //Lerpƒƒ\ƒbƒh(¡‚ÌˆÊ’uAƒS[ƒ‹‚Æ‚·‚×‚«ˆÊ’uAŠ„‡j
+        //ç·šå½¢è£œé–“ã‚’ä½¿ã£ã¦ã€ã‚¸ã‚§ãƒãƒ¬ãƒ¼ã‚¿ãƒ¼ã‚’ç›®çš„ã®å ´æ‰€ã«å‹•ã‹ã™
+        //Lerpãƒ¡ã‚½ãƒƒãƒ‰(ä»Šã®ä½ç½®ã€ã‚´ãƒ¼ãƒ«ã¨ã™ã¹ãä½ç½®ã€å‰²åˆï¼‰
         transform.position = Vector3.Lerp(transform.position, cam.transform.position + diff, followSpeed * Time.deltaTime);
     }
 
-    //ŠëŒ¯Ô‚Ì¶¬ƒƒ\ƒbƒh
+    //å±é™ºè»Šã®ç”Ÿæˆãƒ¡ã‚½ãƒƒãƒ‰
     void DangerCreated()
     {
-        isSky = Random.Range(0, 2); //‹ó’†‚©‚Ç‚¤‚©‚ğƒ‰ƒ“ƒ_ƒ€ 0‚©1
-        int rand = Random.Range(-2, 3);//ƒŒ[ƒ“”Ô†‚ğƒ‰ƒ“ƒ_ƒ€‚Éæ“¾
-        posX = rand * Lanewidth; //ƒŒ[ƒ“”Ô†‚ÆƒŒ[ƒ“•‚ÅÀ•W‚ğŒˆ‚ß‚é
+        isSky = Random.Range(0, 2); //ç©ºä¸­ã‹ã©ã†ã‹ã‚’ãƒ©ãƒ³ãƒ€ãƒ  0ã‹1
+        int rand = Random.Range(-2, 3);//ãƒ¬ãƒ¼ãƒ³ç•ªå·ã‚’ãƒ©ãƒ³ãƒ€ãƒ ã«å–å¾—
+        posX = rand * Lanewidth; //ãƒ¬ãƒ¼ãƒ³ç•ªå·ã¨ãƒ¬ãƒ¼ãƒ³å¹…ã§åº§æ¨™ã‚’æ±ºã‚ã‚‹
 
-        //‚¢‚Á‚½‚ñ¶¬ˆÊ’uî•ñv‚Ì‚‚³‚ÍEnemyGenerator‚Æ“¯‚¶ˆÊ’u
+        //ã„ã£ãŸã‚“ç”Ÿæˆä½ç½®æƒ…å ±vã®é«˜ã•ã¯EnemyGeneratorã¨åŒã˜ä½ç½®
         Vector3 v = new Vector3(posX, transform.position.y, transform.position.z);
 
-        //‚à‚µisSky‚ª0‚È‚ç‹ó’†À•W
+        //ã‚‚ã—isSkyãŒ0ãªã‚‰ç©ºä¸­åº§æ¨™
         if (isSky == 0) v.y = 1;
 
-        //ƒvƒŒƒnƒu‰»‚µ‚½ŠëŒ¯Ô‚ğAƒWƒFƒlƒŒ[ƒ^[‚Ì‚»‚Ì‚ÌZ‚ÌˆÊ’u‚ÉAŠëŒ¯Ô‚ÌŒü‚«‚»‚Ì‚Ü‚Ü‚É¶¬‚·‚é
+        //ãƒ—ãƒ¬ãƒãƒ–åŒ–ã—ãŸå±é™ºè»Šã‚’ã€ã‚¸ã‚§ãƒãƒ¬ãƒ¼ã‚¿ãƒ¼ã®ãã®æ™‚ã®Zã®ä½ç½®ã«ã€å±é™ºè»Šã®å‘ããã®ã¾ã¾ã«ç”Ÿæˆã™ã‚‹
         Instantiate(dangerPrefab[isSky], v, dangerPrefab[isSky].transform.rotation);
     }
 }
